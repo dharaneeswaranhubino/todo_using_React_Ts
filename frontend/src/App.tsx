@@ -126,7 +126,7 @@ function App() {
           value={form.phone}
           onChange={handleChange}
           onKeyDown={handleKeyPress}
-          maxLength="10"
+          maxLength={10}
         />
 
         <button onClick={handleSubmit}>{editingId ? "Update" : "Add"}</button>
