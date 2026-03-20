@@ -1,92 +1,46 @@
 import db from "../config/db.js";
 import type { RowDataPacket, ResultSetHeader } from "mysql2/promise";
 
-
-export interface Task extends RowDataPacket {
+export interface User extends RowDataPacket {
   id: number;
-  tasks: string;
-  taskStatus: "pending" | "completed" | "rejected";
-  statusCode: number;
+  name: string;
+  email: string;
+  phone: string;
   createdAt: Date;
-  updatedAt: Date | null;
-  completedAt: Date | null;
+  updatedAt: Date;
 }
 
-
-export const getAllTaskList = async (): Promise<Task[]> => {
-  const query = "SELECT * FROM todo_ts";
-  const [rows] = await db.query<Task[]>(query);
+export const getAllTaskList = async (): Promise<User[]> => {
+  const [rows] = await db.query<User[]>("SELECT * FROM users ORDER BY createdAt DESC");
   return rows;
 };
 
-
-export const getSingleTaskList = async (id: string): Promise<Task | null> => {
-  const query = "SELECT * FROM todo_ts WHERE ID = ?";
-  const [rows] = await db.query<Task[]>(query, [id]);
-
-//   return rows.length ? rows[0] : null;
+export const getSingleTaskList = async (id: string): Promise<User | null> => {
+  const [rows] = await db.query<User[]>("SELECT * FROM users WHERE id = ?", [id]);
   if (rows.length === 0) return null;
-
   return rows[0]!;
 };
 
-
-export const addTasks = async (
-  taskData: { tasks: string }
-): Promise<ResultSetHeader> => {
-  const query =
-    "INSERT INTO todo_ts (tasks, taskStatus, statusCode) VALUES (?, 'pending', 0)";
-
-  const [result] = await db.query<ResultSetHeader>(query, [taskData.tasks]);
+export const addTasks = async (userData: { name: string; email: string; phone: string }): Promise<ResultSetHeader> => {
+  const [result] = await db.query<ResultSetHeader>(
+    "INSERT INTO users (name, email, phone) VALUES (?, ?, ?)",
+    [userData.name, userData.email, userData.phone]
+  );
   return result;
 };
 
-
-export const editTask = async (
-  taskData: { tasks: string },
-  taskId: string
-): Promise<ResultSetHeader> => {
-  const query = "UPDATE todo_ts SET tasks=?, updatedAt=NOW() WHERE id=?";
-  const [result] = await db.query<ResultSetHeader>(query, [
-    taskData.tasks,
-    taskId,
-  ]);
+export const editTask = async (userData: { name: string; email: string; phone: string }, userId: string): Promise<ResultSetHeader> => {
+  const [result] = await db.query<ResultSetHeader>(
+    "UPDATE users SET name=?, email=?, phone=?, updatedAt=NOW() WHERE id=?",
+    [userData.name, userData.email, userData.phone, userId]
+  );
   return result;
 };
 
-
-export const deleteTasks = async (taskId: string): Promise<ResultSetHeader> => {
-  const query = "DELETE FROM todo_ts WHERE id=?";
-  const [result] = await db.query<ResultSetHeader>(query, [taskId]);
-  return result;
-};
-
-
-export const updateTaskStatus = async (
-  id: string,
-  status: "pending" | "completed" | "rejected"
-): Promise<ResultSetHeader> => {
-  let statusCode = 0;
-  let completedAt: Date | null = null;
-
-  if (status === "completed") {
-    statusCode = 1;
-    completedAt = new Date();
-  } else if (status === "rejected") {
-    statusCode = 2;
-  }
-
-  const query = `
-    UPDATE todo_ts 
-    SET taskStatus=?, statusCode=?, completedAt=?, updatedAt=NOW() 
-    WHERE id=?`;
-
-  const [result] = await db.query<ResultSetHeader>(query, [
-    status,
-    statusCode,
-    completedAt,
-    id,
-  ]);
-
+export const deleteTasks = async (userId: string): Promise<ResultSetHeader> => {
+  const [result] = await db.query<ResultSetHeader>(
+    "DELETE FROM users WHERE id=?",
+    [userId]
+  );
   return result;
 };
