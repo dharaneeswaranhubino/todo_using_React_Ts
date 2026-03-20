@@ -24,9 +24,9 @@ const Popup = ({ message, type, isVisible, onClose }: PopupProps) => {
     <div className={`popup popup-${type}`}>
       <div className="popup-content">
         <span className="popup-icon">
-          {type === "success" && "✅"}
-          {type === "error" && "❌"}
-          {type === "info" && "ℹ️"}
+          {type === "success" && ""}
+          {type === "error" && ""}
+          {type === "info" && ""}
         </span>
         <p className="popup-message">{message}</p>
         <button className="popup-close" onClick={onClose}>

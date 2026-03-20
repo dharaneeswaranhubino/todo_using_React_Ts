@@ -39,7 +39,7 @@ function App() {
   };
 
   const fetchUsers = async () => {
-    const res = await axios.get("http://localhost:5000/api/User/");
+    const res = await axios.get("/api/User/");
     setUsers(res.data.data);
     // console.log(res.data.data);
   };
@@ -81,10 +81,10 @@ function App() {
 
     try {
       if (editingId) {
-        await axios.put(`http://localhost:5000/api/User/${editingId}`, form);
+        await axios.put(`/api/User/${editingId}`, form);
         showPopup("User Updated", "success");
       } else {
-        await axios.post("http://localhost:5000/api/User/", form);
+        await axios.post("/api/User/", form);
         showPopup("User Added", "success");
       }
 

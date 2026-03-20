@@ -35,7 +35,7 @@ const UsersTable = ({
     const pages: (number | string)[] = [];
     
     if (totalPages <= maxVisible) {
-      // If total pages <= 5, show all
+      // If total pages => 5, show all
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
     
@@ -90,7 +90,7 @@ const UsersTable = ({
       return;
     }
     try {
-      await axios.delete(`http://localhost:5000/api/User/${id}`);
+      await axios.delete(`/api/User/${id}`);
 
       showPopup("User Deleted", "success");
 
