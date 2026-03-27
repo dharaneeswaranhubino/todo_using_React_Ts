@@ -1,3 +1,4 @@
+import type { Request, Response, NextFunction } from "express";
 import {
   getAllTaskList,
   getSingleTaskList,
@@ -5,7 +6,6 @@ import {
   editTask,
   deleteTasks,
 } from "../services/taskService.js";
-import type { Request, Response, NextFunction } from "express";
 
 export const getAllTask = async (req: Request, res: Response, next: NextFunction) => {
   try {
