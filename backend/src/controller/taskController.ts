@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from "express";
+import type { RequestHandler } from "express";
 import {
   getAllTaskList,
   getSingleTaskList,
@@ -7,7 +7,7 @@ import {
   deleteTasks,
 } from "../services/taskService.js";
 
-export const getAllTask = async (req: Request, res: Response, next: NextFunction) => {
+export const getAllTask:RequestHandler = async (req, res, next) => {
   try {
     const data = await getAllTaskList();
     res.status(200).json({ data });
@@ -16,7 +16,7 @@ export const getAllTask = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-export const getSingleTask = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+export const getSingleTask:RequestHandler<{ id: string }> = async (req, res, next) => {
   try {
     const data = await getSingleTaskList(req.params.id);
     if (!data) return res.status(404).json({ message: "User not found" });
@@ -26,7 +26,7 @@ export const getSingleTask = async (req: Request<{ id: string }>, res: Response,
   }
 };
 
-export const createTask = async (req: Request, res: Response, next: NextFunction) => {
+export const createTask:RequestHandler = async (req, res, next) => {
   try {
     const { name, email, phone } = req.body;
     if (!name || !email || !phone)
@@ -39,7 +39,7 @@ export const createTask = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-export const updateTask = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+export const updateTask:RequestHandler<{ id: string }> = async (req, res, next) => {
   try {
     const result = await editTask(req.body, req.params.id);
     if (!result.affectedRows)
@@ -50,7 +50,7 @@ export const updateTask = async (req: Request<{ id: string }>, res: Response, ne
   }
 };
 
-export const deleteTask = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+export const deleteTask:RequestHandler<{ id: string }> = async (req, res, next) => {
   try {
     const result = await deleteTasks(req.params.id);
     if (!result.affectedRows)
