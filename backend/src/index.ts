@@ -1,11 +1,7 @@
-import express from "express";
-import type { Request, Response, NextFunction } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import router from "./routes/indexRouter.js";
 import serverless from "serverless-http";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const app = express();
 
@@ -24,10 +20,17 @@ app.get("/", (_req: Request, res: Response) => {
 app.use(
   (err: any, req: Request, res: Response, next: NextFunction) => {
     res.status(err.status || 500).json({
-      error: "Something went wrong",
+      error: "something went wrong",
       message: err.message,
+      stack:
+        process.env.NODE_ENV === "production"
+          ? undefined
+          : err.stack,
     });
   }
 );
 
+/**
+ * ✅ Vercel needs THIS export
+ */
 export default serverless(app);

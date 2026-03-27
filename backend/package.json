@@ -5,8 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/index.ts",
-    "build": "tsc"
+    "start": "nodemon --legacy-watch"
   },
   "keywords": [],
   "author": "",
