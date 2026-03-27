@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon --legacy-watch"
+    "dev": "nodemon src/index.ts",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +18,7 @@
     "express": "^5.2.1",
     "mysql2": "^3.17.2",
     "nodemon": "^3.1.11",
+    "serverless-http": "^4.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },

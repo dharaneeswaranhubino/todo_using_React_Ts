@@ -1,23 +1,33 @@
 import express from "express";
-import cors from "cors";
-import router from "./routes/indexRouter.js"
-import db from "./config/db.js"
 import type { Request, Response, NextFunction } from "express";
+import cors from "cors";
+import router from "./routes/indexRouter.js";
+import serverless from "serverless-http";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", router);
 
-app.use((err:any, req:Request, res:Response, next:NextFunction) => {
-    res.status(err.status || 500).send({
-        error: "something went wrong",
-        message: err.message,
-        stack: err.stack
-    })
-})
+// health check
+app.get("/", (_req: Request, res: Response) => {
+  res.send("API running 🚀");
+});
 
-export default app;
+// global error handler
+app.use(
+  (err: any, req: Request, res: Response, next: NextFunction) => {
+    res.status(err.status || 500).json({
+      error: "Something went wrong",
+      message: err.message,
+    });
+  }
+);
+
+export default serverless(app);
